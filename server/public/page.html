@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="page"></div>
+    <script>
+        const url = window.location.href
+        const parts = url.split('/')
+        var content_id = parts[parts.length - 1]
+        fetch(`/data/post/${content_id}`)
+            .then((response) => response.json())
+            .then((data) => {
+                var title = document.getElementsByTagName('title')[0]; // Select the first title element
+                var content = data.content;
+                const mainPage = document.getElementById('page');
+                title.innerText = data.title; // Fix the typo here
+
+                // Create a new div element for the content and set its innerHTML
+                const contentDiv = document.createElement('div');
+                contentDiv.innerHTML = content;
+
+                mainPage.appendChild(contentDiv); // Append the contentDiv to the mainPage
+            })
+            .catch(error => {
+                console.error("Error", error);
+            })
+    </script>
+</body>
+</html>

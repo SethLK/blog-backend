@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch and Display Data</title>
+</head>
+<body>
+    <div>
+        <ul id="contentList"></ul>
+    </div>
+    <script>
+        const ul = document.getElementById('contentList'); // Get the ul element by its ID
+
+        fetch('/data/post')
+            .then((response) => response.json())
+            .then((data) => {
+                data.forEach(content => {
+                    const li = document.createElement('li');
+                    li.innerText = content.content; // Set the text of the li element to the content
+                    ul.appendChild(li); // Append the li element to the ul
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    </script>
+</body>
+</html>

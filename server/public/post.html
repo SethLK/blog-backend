@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Blog</title>
+    <!-- Include Quill's CSS -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+</head>
+<body>
+    <h1>Create Blog</h1>
+    <form id="Blog-form">
+        <label for="Blog-title">Title:</label>
+        <input type="text" id="Blog-title" name="title" required>
+        
+        <label for="editor">Content:</label>
+        <div id="editor"></div>
+        
+        <button type="submit">Create Blog</button>
+    </form>
+    
+    <!-- Include Quill's JavaScript -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    
+    <script>
+        const url = window.location.href;
+        const parts = url.split('/');
+        const course_id = parts[parts.length - 5];
+
+        const lesson_id = parts[parts.length - 3]
+        // Initialize Quill editor
+        var quill = new Quill('#editor', {
+            theme: 'snow'
+        });
+        
+        // Handle form submission
+        document.getElementById('Blog-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const title = document.getElementById('Blog-title').value;
+            const content = quill.root.innerHTML; // Get Quill's HTML content
+            
+            // Send data to server for Blog creation
+            fetch(`/post`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ title, content })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Blog created successfully!');
+                // Redirect to the Blog display or home Blog
+                window.location.href = '/'; 
+            })
+            .catch(error => {
+                console.error('Error creating Blog:', error);
+                alert('An error occurred while creating the Blog.');
+            });
+        });
+    </script>
+</body>
+</html>

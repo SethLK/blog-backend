@@ -1,0 +1,66 @@
+<!-- register.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+</head>
+<body>
+    <h1>Register</h1>
+    <form id="registrationForm">
+        <label for="username">Username</label><br>
+        <input type="text" id="username" placeholder="Username" required><br>
+        <label for="email">Email</label><br>
+        <input type="email" id="email" placeholder="Email" required><br>
+        <label for="password">Password</label><br>
+        <input type="password" id="password" placeholder="Password" required><br>
+        <label for="confirmPassword">Confirm Password</label><br>
+        <input type="password" id="confirmPassword" placeholder="Confirm Password" required><br>
+        <button type="submit">Register</button>
+    </form>
+    <script>
+        document.getElementById("registrationForm").addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById("username").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+
+            if (password !== confirmPassword) {
+                alert("Password and Confirm Password do not match!");
+                return;
+            }
+
+            // Create payload object
+            const data = {
+                username: username,
+                email: email,
+                password: password
+            };
+
+            // Send POST request to server
+            fetch('/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        window.location.href = '/'; // Redirect to home page
+                    } else {
+                        alert(result.message); // Display error message
+                    }
+                    document.getElementById('registrationForm').reset(); // Reset form fields
+                })
+                .catch(error => {
+                    console.error('Error registering user', error);
+                    alert('An error occurred while registering the user.');
+                });
+        });
+    </script>
+</body>
+</html>
